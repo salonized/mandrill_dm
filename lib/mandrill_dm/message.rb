@@ -66,6 +66,8 @@ module MandrillDm
       }
 
       has_image_attachments? ? json_hash.merge(images: image_attachments) : json_hash
+      puts json_hash
+      json_hash
     end
 
     private
