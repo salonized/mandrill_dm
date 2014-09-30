@@ -48,7 +48,7 @@ module MandrillDm
       return nil unless has_image_attachments?
       @mail.attachments.find_all{|attachment| attachment.mime_type.start_with?("image/")}.collect do |attachment|
         {
-          name: attachment.filename,
+          name: attachment.content_id,
           type: attachment.mime_type,
           content: Base64.encode64(attachment.body.decoded)
         }
