@@ -41,7 +41,7 @@ module MandrillDm
     end
 
     def has_image_attachments?
-      @mail.attachments.any?{|attachment| attachment.mime_type.start_with("image/")}
+      @mail.attachments.any?{|attachment| attachment.mime_type.start_with?("image/")}
     end
 
     def image_attachments
