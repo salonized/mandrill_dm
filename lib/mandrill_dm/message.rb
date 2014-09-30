@@ -45,6 +45,8 @@ module MandrillDm
     end
 
     def image_attachments
+      puts has_image_attachments? ? "Got images" : "No images"
+
       return nil unless has_image_attachments?
       @mail.attachments.find_all{|attachment| attachment.mime_type.start_with?("image/")}.collect do |attachment|
         {
