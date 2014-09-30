@@ -56,7 +56,7 @@ module MandrillDm
     end
 
     def to_json
-      {
+      json_hash = {
         html: html,
         text: text,
         subject: subject,
