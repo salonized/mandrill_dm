@@ -44,11 +44,26 @@ module MandrillDm
       @mail.attachments.any?{|attachment| attachment.mime_type.start_with?("image/")}
     end
 
+    def has_plain_attachments?
+      @mail.attachments.any?{|attachment| !attachment.mime_type.start_with?("image/")}
+    end
+
     def image_attachments
       return nil unless has_image_attachments?
       @mail.attachments.find_all{|attachment| attachment.mime_type.start_with?("image/")}.collect do |attachment|
         {
           name: attachment.content_id.gsub(/<|>/, ""),
+          type: attachment.mime_type,
+          content: Base64.encode64(attachment.body.decoded)
+        }
+      end
+    end
+
+    def plain_attachments
+      return nil unless has_image_attachments?
+      @mail.attachments.find_all{|attachment| !attachment.mime_type.start_with?("image/")}.collect do |attachment|
+        {
+          name: attachment.filename.gsub(/<|>/, ""),
           type: attachment.mime_type,
           content: Base64.encode64(attachment.body.decoded)
         }
@@ -65,7 +80,8 @@ module MandrillDm
         to: to
       }
 
-      has_image_attachments? ? json_hash.merge(images: image_attachments) : json_hash
+      json_hash = has_image_attachments? ? json_hash.merge(images: image_attachments) : json_hash
+      has_plain_attachments? ? json_hash.merge(attachments: plain_attachments) : json_hash
     end
 
     private
