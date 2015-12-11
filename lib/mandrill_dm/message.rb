@@ -60,7 +60,7 @@ module MandrillDm
     end
 
     def plain_attachments
-      return nil unless has_image_attachments?
+      return nil unless has_plain_attachments?
       @mail.attachments.find_all{|attachment| !attachment.mime_type.start_with?("image/")}.collect do |attachment|
         {
           name: attachment.filename.gsub(/<|>/, ""),
